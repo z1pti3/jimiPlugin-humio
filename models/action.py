@@ -90,12 +90,14 @@ class _humioSearch(action._action):
                     actionResult["rc"] = -1
                     actionResult["result"] = False
 
-    def setAttribute(self,attr,value):
+    def setAttribute(self,attr,value,sessionData=None):
         if attr == "searchQuery":
-            self.humioJob = ""
-            self.searchQuery = value
-            return True
-        return super(_humioSearch, self).setAttribute(attr,value)
+            if fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
+                self.humioJob = ""
+                self.searchQuery = value
+                return True
+            return False
+        return super(_humioSearch, self).setAttribute(attr,value,sessionData=sessionData)
 
 
 class _humioIngest(action._action):
@@ -183,11 +185,13 @@ class _humioIngest(action._action):
     def getFromDict(self, dataDict, mapList):
         return reduce(operator.getitem, mapList, dataDict)
 
-    def setAttribute(self,attr,value):
+    def setAttribute(self,attr,value,sessionData=None):
         if attr == "humio_ingest_token" and not value.startswith("ENC "):
-            self.humio_ingest_token = "ENC {0}".format(auth.getENCFromPassword(value))
-            return True
-        return super(_humioIngest, self).setAttribute(attr,value)
+            if fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
+                self.humio_ingest_token = "ENC {0}".format(auth.getENCFromPassword(value))
+                return True
+            return False
+        return super(_humioIngest, self).setAttribute(attr,value,sessionData=sessionData)
 
 
 
