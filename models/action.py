@@ -151,7 +151,7 @@ class _humioIngest(action._action):
 
     def buildEvents(self,event):
         if self.custom_time:
-            timing = entry[self.time_field]
+            timing = event[self.time_field]
         else:
             timing = datetime.now().timestamp()
         return { "timestamp": timing * 1000, "attributes" : event }
