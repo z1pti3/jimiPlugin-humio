@@ -72,8 +72,8 @@ class _humio(trigger._trigger):
                 self.humioJob = ""
                 self.update(["humioJob"])
 
-    def setAttribute(self,attr,value):
+    def setAttribute(self,attr,value,sessionData=None):
         if attr == "searchQuery":
             self.humioJob = ""
             self.update(['humioJob'])
-        return super(_humio, self).setAttribute(attr,value)
+        return super(_humio, self).setAttribute(attr,value,sessionData)

@@ -5,7 +5,7 @@ from pathlib import Path
 from functools import reduce
 import operator
 
-from core import settings, logging, helpers, auth, cache
+from core import settings, logging, helpers, auth, cache, db
 from core.models import action, conduct
 
 from plugins.humio.includes import humio
@@ -92,7 +92,7 @@ class _humioSearch(action._action):
 
     def setAttribute(self,attr,value,sessionData=None):
         if attr == "searchQuery":
-            if fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
+            if db.fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
                 self.humioJob = ""
                 self.searchQuery = value
                 return True
@@ -154,7 +154,7 @@ class _humioIngest(action._action):
 
     def buildEvents(self,event):
         if self.custom_time:
-            timing = entry[self.time_field]
+            timing = event[self.time_field]
         else:
             timing = datetime.now().timestamp()
         return { "timestamp": timing * 1000, "attributes" : event }
@@ -190,7 +190,7 @@ class _humioIngest(action._action):
 
     def setAttribute(self,attr,value,sessionData=None):
         if attr == "humio_ingest_token" and not value.startswith("ENC "):
-            if fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
+            if db.fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
                 self.humio_ingest_token = "ENC {0}".format(auth.getENCFromPassword(value))
                 return True
             return False
