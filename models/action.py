@@ -18,7 +18,12 @@ class _humioSearch(action._action):
     searchStart = str()
     searchEnd = str()
     searchLive = bool()
+    humioOverrideSettings = bool()
     humioJob = str()
+    humioHost = str()
+    humioPort = int()
+    humioAPIToken = str()
+    humioTimeout = int()
 
     def run(self,data,persistentData,actionResult):
         searchQuery = helpers.evalString(self.searchQuery,{"data" : data})
@@ -26,10 +31,19 @@ class _humioSearch(action._action):
         searchStart = helpers.evalString(self.searchStart,{"data" : data})
         searchEnd = helpers.evalString(self.searchEnd,{"data" : data})
 
-        if "ca" in humioSettings:
-            h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],humioSettings["ca"],humioSettings["requestTimeout"])
+        if not self.humioOverrideSettings:
+            if "ca" in humioSettings:
+                h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],humioSettings["ca"],humioSettings["requestTimeout"])
+            else:
+                h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],requestTimeout=humioSettings["requestTimeout"])
         else:
-            h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],requestTimeout=humioSettings["requestTimeout"])
+            if "plain_humioAPIToken" not in self:
+                self.plain_humioAPIToken = auth.getPasswordFromENC(self.humioAPIToken)
+            if "ca" in humioSettings:
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,humioSettings["ca"],self.humioTimeout)
+            else:
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=self.humioTimeout)
+
         if not self.searchLive:
             kwargs = { }
             # Skipping any undefined search values
@@ -95,6 +109,11 @@ class _humioSearch(action._action):
             if db.fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
                 self.humioJob = ""
                 self.searchQuery = value
+                return True
+            return False
+        if attr == "humioAPIToken" and not value.startswith("ENC "):
+            if db.fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
+                self.humioAPIToken = "ENC {0}".format(auth.getENCFromPassword(value))
                 return True
             return False
         return super(_humioSearch, self).setAttribute(attr,value,sessionData=sessionData)
@@ -195,6 +214,3 @@ class _humioIngest(action._action):
                 return True
             return False
         return super(_humioIngest, self).setAttribute(attr,value,sessionData=sessionData)
-
-
-

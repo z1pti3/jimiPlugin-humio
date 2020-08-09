@@ -5,7 +5,7 @@ from plugins.humio.includes import humio
 
 from core.models import trigger
 
-from core import settings, logging
+from core import settings, logging, auth, db
 
 from system.models import trigger as systemTrigger
 
@@ -20,12 +20,28 @@ class _humio(trigger._trigger):
     searchLive = bool()
     onlyNew = bool()
     lastEventTimestamp = int()
+    humioOverrideSettings = bool()
+    humioJob = str()
+    humioHost = str()
+    humioPort = int()
+    humioAPIToken = str()
+    humioTimeout = int()
 
     def check(self):
-        if "ca" in humioSettings:
-            h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],humioSettings["ca"],humioSettings["requestTimeout"])
+
+        if not self.humioOverrideSettings:
+            if "ca" in humioSettings:
+                h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],humioSettings["ca"],humioSettings["requestTimeout"])
+            else:
+                h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],requestTimeout=humioSettings["requestTimeout"])
         else:
-            h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],requestTimeout=humioSettings["requestTimeout"])
+            if "plain_humioAPIToken" not in self:
+                self.plain_humioAPIToken = auth.getPasswordFromENC(self.humioAPIToken)
+            if "ca" in humioSettings:
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,humioSettings["ca"],self.humioTimeout)
+            else:
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=self.humioTimeout)
+
         if not self.humioJob:
             logging.debug("Humio No Existing Job Found, class={0}".format(self.parse(True)),10)
             kwargs = { }
@@ -76,4 +92,9 @@ class _humio(trigger._trigger):
         if attr == "searchQuery":
             self.humioJob = ""
             self.update(['humioJob'])
+        if attr == "humioAPIToken" and not value.startswith("ENC "):
+            if db.fieldACLAccess(sessionData,self.acl,attr,accessType="write"):
+                self.humioAPIToken = "ENC {0}".format(auth.getENCFromPassword(value))
+                return True
+            return False
         return super(_humio, self).setAttribute(attr,value,sessionData)
