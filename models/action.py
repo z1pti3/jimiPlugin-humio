@@ -109,6 +109,9 @@ class _humioIngest(action._action):
     flatten_field = str()
 
     def run(self,data,persistentData,actionResult):
+        if "plain_humio_ingest_token" not in self:
+            self.plain_humio_ingest_token = auth.getPasswordFromENC(self.humio_ingest_token)
+
         # Get data dict
         if len(self.field) > 0:
             dataToSend = helpers.getDictValue(self.field[0],{"data" : data})
@@ -158,7 +161,7 @@ class _humioIngest(action._action):
 
     def shipHumio(self,event,timing):
         api_url = "https://{}:443/api/v1/dataspaces/{}/ingest".format(humioSettings["host"],self.humio_repo)
-        headers = {"Authorization":"Bearer {}".format(auth.getPasswordFromENC(self.humio_ingest_token)),"Content-Type":"application/json","Accept":"application/json"}
+        headers = {"Authorization":"Bearer {}".format(self.plain_humio_ingest_token,"Content-Type":"application/json","Accept":"application/json"}
         data = [{
                     "tags" : {},
                     "events": [ { "timestamp": timing * 1000, "attributes" : event } ]
@@ -171,7 +174,7 @@ class _humioIngest(action._action):
 
     def shippingHandlerBulk(self,events):
         api_url = "https://{}:443/api/v1/dataspaces/{}/ingest".format(humioSettings["host"],self.humio_repo)
-        headers = {"Authorization":"Bearer {}".format(auth.getPasswordFromENC(self.humio_ingest_token)),"Content-Type":"application/json","Accept":"application/json"}
+        headers = {"Authorization":"Bearer {}".format(self.plain_humio_ingest_token,"Content-Type":"application/json","Accept":"application/json"}
         data = [{
                     "tags" : {},
                     "events": events

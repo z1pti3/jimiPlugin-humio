@@ -2,7 +2,7 @@ from core import plugin, model
 from plugins.humio.models import trigger
 
 class _humio(plugin._plugin):
-    version = 1.5
+    version = 1.6
 
     def install(self):
         # Register models
@@ -24,9 +24,6 @@ class _humio(plugin._plugin):
         #Added Humio Dashboard Action
         if self.version < 1.5:
             model.registerModel("humioDashboard","_humioDashboard","_action","plugins.humio.models.action")
-
-        #Added HumioSearch Action
-        if self.version < 1.5:
             model.registerModel("humioSearch","_humioSearch","_action","plugins.humio.models.action")
 
         #Added Humio Ingest Action
