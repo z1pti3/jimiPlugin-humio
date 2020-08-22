@@ -35,12 +35,15 @@ class _humio(trigger._trigger):
             else:
                 h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],requestTimeout=humioSettings["requestTimeout"])
         else:
-            if "plain_humioAPIToken" not in self:
+            humioTimeout = 30
+            if self.humioTimeout > 0:
+                humioTimeout = self.humioTimeout
+            if not hasattr(self,"plain_humioAPIToken"):
                 self.plain_humioAPIToken = auth.getPasswordFromENC(self.humioAPIToken)
             if "ca" in humioSettings:
-                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,humioSettings["ca"],self.humioTimeout)
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,humioSettings["ca"],humioTimeout)
             else:
-                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=self.humioTimeout)
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=humioTimeout)
 
         if not self.humioJob:
             logging.debug("Humio No Existing Job Found, class={0}".format(self.parse(True)),10)

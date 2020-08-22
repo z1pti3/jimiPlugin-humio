@@ -37,12 +37,15 @@ class _humioSearch(action._action):
             else:
                 h = humio.humioClass(humioSettings["host"],humioSettings["port"],humioSettings["apiToken"],humioSettings["secure"],requestTimeout=humioSettings["requestTimeout"])
         else:
-            if "plain_humioAPIToken" not in self:
+            humioTimeout = 30
+            if self.humioTimeout > 0:
+                humioTimeout = self.humioTimeout
+            if not hasattr(self,"plain_humioAPIToken"):
                 self.plain_humioAPIToken = auth.getPasswordFromENC(self.humioAPIToken)
             if "ca" in humioSettings:
-                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,humioSettings["ca"],self.humioTimeout)
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,humioSettings["ca"],humioTimeout)
             else:
-                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=self.humioTimeout)
+                h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=humioTimeout)
 
         if not self.searchLive:
             kwargs = { }
@@ -128,7 +131,7 @@ class _humioIngest(action._action):
     flatten_field = str()
 
     def run(self,data,persistentData,actionResult):
-        if "plain_humio_ingest_token" not in self:
+        if not hasattr(self,"plain_humioAPIToken"):
             self.plain_humio_ingest_token = auth.getPasswordFromENC(self.humio_ingest_token)
 
         # Get data dict
