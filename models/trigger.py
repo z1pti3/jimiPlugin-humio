@@ -84,7 +84,7 @@ class _humio(trigger._trigger):
                     self.result["events"] = events
                 else:
                     self.result["events"] = pollResult[1]["events"]
-                self.result["humio"] = {"searchQuery" : str(self.searchQuery), "searchRepository" : str(self.searchRepository)}
+                self.result["plugin"]["humio"] = {"searchQuery" : str(self.searchQuery), "searchRepository" : str(self.searchRepository)}
             else:
                 systemTrigger.failedTrigger(None,"HumioJobPollFailed","result={0}, class={1}".format(pollResult,self.parse(True)))
                 logging.debug("Humio poll failed, result={0}, class={1}".format(pollResult,self.parse(True)),6)
