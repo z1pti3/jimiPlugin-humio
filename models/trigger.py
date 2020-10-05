@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from plugins.humio.includes import humio
 
-from core.models import trigger
+from core.models import trigger, webui
 
 from core import settings, logging, auth, db
 
@@ -26,6 +26,27 @@ class _humio(trigger._trigger):
     humioPort = int()
     humioAPIToken = str()
     humioTimeout = int()
+
+    class _properties(webui._properties):
+        def generate(self,classObject):
+            formData = []
+            formData.append({"type" : "input", "schemaitem" : "name", "textbox" : classObject.name})
+            formData.append({"type" : "input", "schemaitem" : "_id", "textbox" : classObject._id})
+            formData.append({"type" : "input", "schemaitem" : "autoRestartCount", "textbox" : classObject.autoRestartCount, "tooltip" : "Defines the number of time to automatically re-attempt a trigger before marking it as failed"})
+            formData.append({"type" : "input", "schemaitem" : "comment", "textbox" : classObject.comment})
+            formData.append({"type" : "checkbox", "schemaitem" : "enabled", "checked" : classObject.enabled})
+            formData.append({"type" : "input", "schemaitem" : "humioTimeout", "textbox" : classObject.humioTimeout})
+            formData.append({"type" : "input", "schemaitem" : "humioAPIToken", "textbox" : classObject.humioAPIToken})
+            formData.append({"type" : "input", "schemaitem" : "humioPort", "textbox" : classObject.humioPort})
+            formData.append({"type" : "input", "schemaitem" : "humioHost", "textbox" : classObject.humioHost})
+            formData.append({"type" : "checkbox", "schemaitem" : "humioOverrideSettings", "checked" : classObject.humioOverrideSettings, "tooltip" : "Select to use object defined humio host settings instead of global settings.json"})
+            formData.append({"type" : "checkbox", "schemaitem" : "onlyNew", "checked" : classObject.onlyNew, "tooltip" : "When select only events with a timestamp greater than the last poll will be passed onto the jimi flow"})
+            formData.append({"type" : "checkbox", "schemaitem" : "searchLive", "checked" : classObject.searchLive, "tooltip" : "Run a live search and cache the job for future polling - this reduces the overheads on humio when running the same search oftern"})
+            formData.append({"type" : "input", "schemaitem" : "searchEnd", "textbox" : classObject.searchEnd})
+            formData.append({"type" : "input", "schemaitem" : "searchStart", "textbox" : classObject.searchStart})
+            formData.append({"type" : "input", "schemaitem" : "searchRepository", "textbox" : classObject.searchRepository})
+            formData.append({"type" : "input", "schemaitem" : "searchQuery", "textbox" : classObject.searchQuery})
+            return formData
 
     def check(self):
 
