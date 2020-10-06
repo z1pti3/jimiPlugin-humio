@@ -1,4 +1,5 @@
 import urllib
+import time
 from datetime import datetime, timedelta
 
 from plugins.humio.includes import humio
@@ -67,6 +68,9 @@ class _humio(trigger._trigger):
                 h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,humioSettings["ca"],humioTimeout)
             else:
                 h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=humioTimeout)
+
+        if self._id=="000000000001010000000000":
+            self.humioJob=""
 
         if not self.humioJob:
             logging.debug("Humio No Existing Job Found, class={0}".format(self.parse(True)),10)
