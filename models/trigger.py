@@ -46,6 +46,8 @@ class _humio(trigger._trigger):
             formData.append({"type" : "input", "schemaitem" : "searchStart", "textbox" : classObject.searchStart})
             formData.append({"type" : "input", "schemaitem" : "searchRepository", "textbox" : classObject.searchRepository})
             formData.append({"type" : "input", "schemaitem" : "searchQuery", "textbox" : classObject.searchQuery})
+            formData.append({"type" : "json-input", "schemaitem" : "varDefinitions", "json-input" : classObject.varDefinitions})
+            formData.append({"type" : "input", "schemaitem" : "logicString", "textbox" : classObject.logicString})
             return formData
 
     def check(self):
