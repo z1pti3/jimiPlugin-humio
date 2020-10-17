@@ -2,7 +2,7 @@ from core import plugin, model
 from plugins.humio.models import trigger
 
 class _humio(plugin._plugin):
-    version = 1.6
+    version = 2.0
 
     def install(self):
         # Register models
