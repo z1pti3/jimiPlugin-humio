@@ -183,7 +183,7 @@ class _humioIngest(action._action):
 
     def shipHumio(self,event,timing):
         api_url = "https://{}:443/api/v1/dataspaces/{}/ingest".format(humioSettings["host"],self.humio_repo)
-        headers = {"Authorization":"Bearer {}".format(self.plain_humio_ingest_token,"Content-Type":"application/json","Accept":"application/json"}
+        headers = {"Authorization":"Bearer {}".format(self.plain_humio_ingest_token),"Content-Type":"application/json","Accept":"application/json"}
         data = [{
                     "tags" : {},
                     "events": [ { "timestamp": timing * 1000, "attributes" : event } ]
@@ -196,7 +196,7 @@ class _humioIngest(action._action):
 
     def shippingHandlerBulk(self,events):
         api_url = "https://{}:443/api/v1/dataspaces/{}/ingest".format(humioSettings["host"],self.humio_repo)
-        headers = {"Authorization":"Bearer {}".format(self.plain_humio_ingest_token,"Content-Type":"application/json","Accept":"application/json"}
+        headers = {"Authorization":"Bearer {}".format(self.plain_humio_ingest_token),"Content-Type":"application/json","Accept":"application/json"}
         data = [{
                     "tags" : {},
                     "events": events
