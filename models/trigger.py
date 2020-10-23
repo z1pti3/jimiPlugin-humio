@@ -43,6 +43,8 @@ class _humio(trigger._trigger):
             formData.append({"type" : "input", "schemaitem" : "clusterSet", "textbox" : classObject.clusterSet})
             formData.append({"type" : "input", "schemaitem" : "autoRestartCount", "textbox" : classObject.autoRestartCount, "tooltip" : "Defines the number of time to automatically re-attempt a trigger before marking it as failed"})
             formData.append({"type" : "checkbox", "schemaitem" : "enabled", "checked" : classObject.enabled})
+            formData.append({"type" : "input", "schemaitem" : "schedule", "textbox" : classObject.schedule})
+            formData.append({"type" : "input", "schemaitem" : "maxDuration", "textbox" : classObject.maxDuration})
             formData.append({"type" : "checkbox", "schemaitem" : "onlyNew", "checked" : classObject.onlyNew, "tooltip" : "When select only events with a timestamp greater than the last poll will be passed onto the jimi flow"})
             formData.append({"type" : "checkbox", "schemaitem" : "searchLive", "checked" : classObject.searchLive, "tooltip" : "Run a live search and cache the job for future polling - this reduces the overheads on humio when running the same search oftern"})
             formData.append({"type" : "input", "schemaitem" : "searchEnd", "textbox" : classObject.searchEnd})
@@ -51,7 +53,6 @@ class _humio(trigger._trigger):
             formData.append({"type" : "input", "schemaitem" : "searchQuery", "textbox" : classObject.searchQuery})
             formData.append({"type" : "json-input", "schemaitem" : "varDefinitions", "textbox" : classObject.varDefinitions})
             formData.append({"type" : "input", "schemaitem" : "logicString", "textbox" : classObject.logicString})
-            formData.append({"type" : "input", "schemaitem" : "schedule", "textbox" : classObject.schedule})
             formData.append({"type" : "checkbox", "schemaitem" : "log", "checked" : classObject.log})
             formData.append({"type" : "input", "schemaitem" : "comment", "textbox" : classObject.comment})
             return formData
