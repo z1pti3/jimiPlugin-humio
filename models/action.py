@@ -126,6 +126,7 @@ class _humioIngest(action._action):
     humio_ingest_token = str()
     humio_repo = str()
     field = list()
+    custom_data = dict()
     custom_time = bool()
     time_field = str()
     flatten_field = str()
@@ -135,10 +136,13 @@ class _humioIngest(action._action):
             self.plain_humio_ingest_token = auth.getPasswordFromENC(self.humio_ingest_token)
 
         # Get data dict
-        if len(self.field) > 0:
-            dataToSend = helpers.getDictValue(self.field[0],{"data" : data})
+        if len(self.custom_data) > 0:
+            dataToSend = helpers.evalDict(self.custom_data,{"data" : data})
         else:
-            dataToSend = data
+            if len(self.field) > 0:
+                dataToSend = helpers.getDictValue(self.field[0],{"data" : data})
+            else:
+                dataToSend = data
 
         # Apply flatten
         if self.flatten_field:
@@ -188,7 +192,10 @@ class _humioIngest(action._action):
                     "tags" : {},
                     "events": [ { "timestamp": timing * 1000, "attributes" : event } ]
                 }]
-        r=requests.post(api_url,headers=headers,data=json.dumps(data),verify=Path(humioSettings["ca"]))
+        if "ca" in humioSettings:
+            r=requests.post(api_url,headers=headers,data=json.dumps(data),verify=Path(humioSettings["ca"]))
+        else:
+            r=requests.post(api_url,headers=headers,data=json.dumps(data))
         if r.status_code != 200:
             print(r.status_code)
             return False
@@ -201,7 +208,10 @@ class _humioIngest(action._action):
                     "tags" : {},
                     "events": events
                 }]
-        r=requests.post(api_url,headers=headers,data=json.dumps(data),verify=Path(humioSettings["ca"]))
+        if "ca" in humioSettings:
+            r=requests.post(api_url,headers=headers,data=json.dumps(data),verify=Path(humioSettings["ca"]))
+        else:
+            r=requests.post(api_url,headers=headers,data=json.dumps(data))
         if r.status_code != 200:
             print(r.status_code)
             return False
