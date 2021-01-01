@@ -176,7 +176,7 @@ class _humioIngest(action._action):
         else:
             timing = datetime.now().timestamp()
         if self.humio_repo != "":
-            self.shipHumio(entry,timing)
+            return self.shipHumio(entry,timing)
 
     def buildEvents(self,event):
         if self.custom_time:
