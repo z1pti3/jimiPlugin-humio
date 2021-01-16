@@ -75,10 +75,10 @@ class _humio(trigger._trigger):
             else:
                 h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=humioTimeout)
 
-        if self._id=="000000000001010000000000":
+        if "000000000001010000000000" in self._id:
             self.humioJob=""
 
-        if not self.humioJob:
+        if not self.humioJob or not self.searchLive:
             logging.debug("Humio No Existing Job Found, class={0}".format(self.parse(True)),10)
             kwargs = { }
             # Skipping any undefined search values
