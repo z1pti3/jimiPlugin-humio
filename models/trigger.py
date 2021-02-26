@@ -14,6 +14,7 @@ humioSettings = settings.config["humio"]
 
 class _humio(trigger._trigger):
     humioJob = str()
+    jobStartWaitTime = 10
     searchQuery = str()
     searchRepository = str()
     searchStart = str()
@@ -76,7 +77,7 @@ class _humio(trigger._trigger):
                 h = humio.humioClass(self.humioHost,self.humioPort,self.plain_humioAPIToken,True,requestTimeout=humioTimeout)
 
         if "000000000001010000000000" in self._id:
-            self.humioJob=""
+            self.humioJob = ""
 
         if not self.humioJob or not self.searchLive:
             logging.debug("Humio No Existing Job Found, class={0}".format(self.parse(True)),10)
@@ -95,6 +96,7 @@ class _humio(trigger._trigger):
                 self.humioJob = createJobResult[1]
                 self.update(["humioJob"])
                 logging.debug("Humio Job Created, jobID={0}, class={1}".format(self.humioJob,self.parse(True)),8)
+                time.sleep(self.jobStartWaitTime)
             else:
                 systemTrigger.failedTrigger(None,"HumioJobCreateFailed","result={0}, class={1}".format(createJobResult,self.parse(True)))
                 logging.debug("Humio Job Create Failed, result={0}, class={1}".format(createJobResult,self.parse(True)),5)
