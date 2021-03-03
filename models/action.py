@@ -86,8 +86,7 @@ class _humioSearch(action._action):
                     self.update(["humioJob"])
                     logging.debug("Humio Job Created, jobID={0}, class={1}".format(self.humioJob,self.parse(True)),8)
                 else:
-                    systemTrigger.failedTrigger(None,"HumioJobCreateFailed","result={0}, class={1}".format(createJobResult,self.parse(True)))
-                    logging.debug("Humio Job Create Failed, result={0}, class={1}".format(createJobResult,self.parse(True)),5)
+                    raise humio.jobCreateException(self.id,self.name,self.searchQuery)
 
             if self.humioJob:
                 logging.debug("Humio polling..., class={0}".format(self.parse(True)),15)
@@ -101,9 +100,9 @@ class _humioSearch(action._action):
                     actionResult["rc"] = 0
                     actionResult["result"] = True
                 else:
-                    logging.debug("Humio poll failed, result={0}, class={1}".format(pollResult,self.parse(True)),6)
                     self.humioJob = ""
                     self.update(["humioJob"])
+                    actionResult["msg"] = "Error: Unable to poll humio job. job='{0}'".format(self.humioJob)
                     actionResult["rc"] = -1
                     actionResult["result"] = False
 

@@ -3,6 +3,24 @@ import json
 import time
 from pathlib import Path
 
+class jobPollException(Exception):
+    def __init__(self,objId,objName,jobID):
+        self.id = objId
+        self.name = objName
+        self.jobID = jobID
+        
+    def __str__(self):
+        return "Error: Humio job could not be polled. id='{0}', name='{1}', job='{2}'".format(self.id,self.name,self.jobID)
+
+class jobCreateException(Exception):
+    def __init__(self,objId,objName,query):
+        self.id = objId
+        self.name = objName
+        self.query = query
+        
+    def __str__(self):
+        return "Error: Humio job could not be created. id='{0}', name='{1}', query='{2}'".format(self.id,self.name,self.query)
+
 class humioClass():
     host = str()
     port = int()
