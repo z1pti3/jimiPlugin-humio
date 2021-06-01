@@ -96,7 +96,7 @@ class _humioSearch(action._action):
                 pollResult = h.pollJob(self.searchRepository,self.humioJob,wait)
                 if pollResult[0] == 200 and "events" in pollResult[1]:
                     actionResult["events"] = pollResult[1]["events"]
-                    actionResult["humio"] = {"searchQuery" : str(self.searchQuery), "searchRepository" : str(self.searchRepository)}
+                    actionResult["humio"] = {"searchQuery" : self.searchQuery, "searchRepository" : str(self.searchRepository)}
                     actionResult["rc"] = 0
                     actionResult["result"] = True
                 else:
