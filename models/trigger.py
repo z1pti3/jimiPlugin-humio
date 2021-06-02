@@ -98,7 +98,7 @@ class _humio(trigger._trigger):
                 logging.debug("Humio Job Created, jobID={0}, class={1}".format(self.humioJob,self.parse(True)),8)
                 time.sleep(self.jobStartWaitTime)
             else:
-                raise humio.jobCreateException(self.id,self.name,self.searchQuery)
+                raise humio.jobCreateException(self._id,self.name,self.searchQuery)
 
 
         if self.humioJob:
@@ -119,11 +119,11 @@ class _humio(trigger._trigger):
                     self.result["events"] = events
                 else:
                     self.result["events"] = pollResult[1]["events"]
-                self.result["plugin"]["humio"] = {"searchQuery" : str(self.searchQuery), "searchRepository" : str(self.searchRepository)}
+                self.result["plugin"]["humio"] = {"searchQuery" : self.searchQuery, "searchRepository" : str(self.searchRepository)}
             else:
                 self.humioJob = ""
                 self.update(["humioJob"])
-                raise humio.jobPollException(self.id,self.name,self.humioJob)
+                raise humio.jobPollException(self._id,self.name,self.humioJob)
 
     def setAttribute(self,attr,value,sessionData=None):
         if attr == "searchQuery":

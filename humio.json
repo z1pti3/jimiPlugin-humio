@@ -1,0 +1,352 @@
+{
+   "name": "humio",
+   "author": "z1pti3, biscuit-thief",
+   "version": 2.0,
+   "categories": [
+      "humio",
+      "siem"
+   ],
+   "description": "Plugin for interacting with Humio search and ingest API",
+   "icon": null,
+   "requirements": {
+      "jimi_min_version": null,
+      "jimi_max_version": null,
+      "plugins": []
+   },
+   "collections": {},
+   "triggers": {
+      "humio": {
+         "display_name": "humio",
+         "className": "_humio",
+         "class_location": ".models.trigger",
+         "description": "",
+         "fields": [
+            {
+               "schema_item": "humioJob",
+               "schema_value": "humioJob",
+               "type": "input",
+               "label": "humioJob",
+               "description": ""
+            },
+            {
+               "schema_item": "jobStartWaitTime",
+               "schema_value": "jobStartWaitTime",
+               "type": "input",
+               "label": "jobStartWaitTime",
+               "description": ""
+            },
+            {
+               "schema_item": "searchQuery",
+               "schema_value": "searchQuery",
+               "type": "input",
+               "label": "searchQuery",
+               "description": ""
+            },
+            {
+               "schema_item": "searchRepository",
+               "schema_value": "searchRepository",
+               "type": "input",
+               "label": "searchRepository",
+               "description": ""
+            },
+            {
+               "schema_item": "searchStart",
+               "schema_value": "searchStart",
+               "type": "input",
+               "label": "searchStart",
+               "description": ""
+            },
+            {
+               "schema_item": "searchEnd",
+               "schema_value": "searchEnd",
+               "type": "input",
+               "label": "searchEnd",
+               "description": ""
+            },
+            {
+               "schema_item": "searchLive",
+               "schema_value": "searchLive",
+               "type": "checkbox",
+               "label": "searchLive",
+               "description": ""
+            },
+            {
+               "schema_item": "onlyNew",
+               "schema_value": "onlyNew",
+               "type": "checkbox",
+               "label": "onlyNew",
+               "description": ""
+            },
+            {
+               "schema_item": "lastEventTimestamp",
+               "schema_value": "lastEventTimestamp",
+               "type": "input",
+               "label": "lastEventTimestamp",
+               "description": ""
+            },
+            {
+               "schema_item": "humioOverrideSettings",
+               "schema_value": "humioOverrideSettings",
+               "type": "checkbox",
+               "label": "humioOverrideSettings",
+               "description": ""
+            },
+            {
+               "schema_item": "humioJob",
+               "schema_value": "humioJob",
+               "type": "input",
+               "label": "humioJob",
+               "description": ""
+            },
+            {
+               "schema_item": "humioHost",
+               "schema_value": "humioHost",
+               "type": "input",
+               "label": "humioHost",
+               "description": ""
+            },
+            {
+               "schema_item": "humioPort",
+               "schema_value": "humioPort",
+               "type": "input",
+               "label": "humioPort",
+               "description": ""
+            },
+            {
+               "schema_item": "humioAPIToken",
+               "schema_value": "humioAPIToken",
+               "type": "input",
+               "label": "humioAPIToken",
+               "description": ""
+            },
+            {
+               "schema_item": "humioTimeout",
+               "schema_value": "humioTimeout",
+               "type": "input",
+               "label": "humioTimeout",
+               "description": ""
+            }
+         ],
+         "data_out": {
+            "result": {
+               "description": "Returns True when successful.",
+               "type": "boolean",
+               "always_present": true,
+               "values": {
+                  "True": {
+                     "description": "Successful."
+                  },
+                  "False": {
+                     "description": "Failure."
+                  }
+               }
+            },
+            "rc": {
+               "description": "Returns the exit code for the action.",
+               "type": "number",
+               "always_present": true,
+               "values": {
+                  "0": {
+                     "description": "Successful."
+                  }
+               }
+            }
+         }
+      }
+   },
+   "actions": {
+      "humioSearch": {
+         "display_name": "humioSearch",
+         "className": "_humioSearch",
+         "class_location": ".models.action",
+         "description": "",
+         "fields": [
+            {
+               "schema_item": "searchQuery",
+               "schema_value": "searchQuery",
+               "type": "input",
+               "label": "searchQuery",
+               "description": ""
+            },
+            {
+               "schema_item": "searchRepository",
+               "schema_value": "searchRepository",
+               "type": "input",
+               "label": "searchRepository",
+               "description": ""
+            },
+            {
+               "schema_item": "searchStart",
+               "schema_value": "searchStart",
+               "type": "input",
+               "label": "searchStart",
+               "description": ""
+            },
+            {
+               "schema_item": "searchEnd",
+               "schema_value": "searchEnd",
+               "type": "input",
+               "label": "searchEnd",
+               "description": ""
+            },
+            {
+               "schema_item": "searchLive",
+               "schema_value": "searchLive",
+               "type": "checkbox",
+               "label": "searchLive",
+               "description": ""
+            },
+            {
+               "schema_item": "humioOverrideSettings",
+               "schema_value": "humioOverrideSettings",
+               "type": "checkbox",
+               "label": "humioOverrideSettings",
+               "description": ""
+            },
+            {
+               "schema_item": "humioJob",
+               "schema_value": "humioJob",
+               "type": "input",
+               "label": "humioJob",
+               "description": ""
+            },
+            {
+               "schema_item": "humioHost",
+               "schema_value": "humioHost",
+               "type": "input",
+               "label": "humioHost",
+               "description": ""
+            },
+            {
+               "schema_item": "humioPort",
+               "schema_value": "humioPort",
+               "type": "input",
+               "label": "humioPort",
+               "description": ""
+            },
+            {
+               "schema_item": "humioAPIToken",
+               "schema_value": "humioAPIToken",
+               "type": "input",
+               "label": "humioAPIToken",
+               "description": ""
+            },
+            {
+               "schema_item": "humioTimeout",
+               "schema_value": "humioTimeout",
+               "type": "input",
+               "label": "humioTimeout",
+               "description": ""
+            }
+         ],
+         "data_out": {
+            "result": {
+               "description": "Returns True when successful.",
+               "type": "boolean",
+               "always_present": true,
+               "values": {
+                  "True": {
+                     "description": "Successful."
+                  },
+                  "False": {
+                     "description": "Failure."
+                  }
+               }
+            },
+            "rc": {
+               "description": "Returns the exit code for the action.",
+               "type": "number",
+               "always_present": true,
+               "values": {
+                  "0": {
+                     "description": "Successful."
+                  }
+               }
+            }
+         }
+      },
+      "humioIngest": {
+         "display_name": "humioIngest",
+         "className": "_humioIngest",
+         "class_location": ".models.action",
+         "description": "",
+         "fields": [
+            {
+               "schema_item": "humio_ingest_token",
+               "schema_value": "humio_ingest_token",
+               "type": "input",
+               "label": "humio_ingest_token",
+               "description": ""
+            },
+            {
+               "schema_item": "humio_repo",
+               "schema_value": "humio_repo",
+               "type": "input",
+               "label": "humio_repo",
+               "description": ""
+            },
+            {
+               "schema_item": "field",
+               "schema_value": "field",
+               "type": "json-input",
+               "label": "field",
+               "description": ""
+            },
+            {
+               "schema_item": "custom_data",
+               "schema_value": "custom_data",
+               "type": "json-input",
+               "label": "custom_data",
+               "description": ""
+            },
+            {
+               "schema_item": "custom_time",
+               "schema_value": "custom_time",
+               "type": "checkbox",
+               "label": "custom_time",
+               "description": ""
+            },
+            {
+               "schema_item": "time_field",
+               "schema_value": "time_field",
+               "type": "input",
+               "label": "time_field",
+               "description": ""
+            },
+            {
+               "schema_item": "flatten_field",
+               "schema_value": "flatten_field",
+               "type": "input",
+               "label": "flatten_field",
+               "description": ""
+            }
+         ],
+         "data_out": {
+            "result": {
+               "description": "Returns True when successful.",
+               "type": "boolean",
+               "always_present": true,
+               "values": {
+                  "True": {
+                     "description": "Successful."
+                  },
+                  "False": {
+                     "description": "Failure."
+                  }
+               }
+            },
+            "rc": {
+               "description": "Returns the exit code for the action.",
+               "type": "number",
+               "always_present": true,
+               "values": {
+                  "0": {
+                     "description": "Successful."
+                  }
+               }
+            }
+         }
+      }
+   },
+   "settings": {}
+}

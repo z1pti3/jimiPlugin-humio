@@ -7,7 +7,7 @@ Use jimi in combination with Humio to create powerful jimiFlows that respond to 
 * Create alerts when threshold are met ( can be done per host, per metric etc )
 * Security event enrichment
 * Event filtering
-* Automaticly respond to system failures and carry out automated actions
+* Automaticaly respond to system failures and carry out automated actions
 
 API details are required within jimi settings.json file
 

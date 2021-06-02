@@ -86,7 +86,7 @@ class _humioSearch(action._action):
                     self.update(["humioJob"])
                     logging.debug("Humio Job Created, jobID={0}, class={1}".format(self.humioJob,self.parse(True)),8)
                 else:
-                    raise humio.jobCreateException(self.id,self.name,self.searchQuery)
+                    raise humio.jobCreateException(self._id,self.name,self.searchQuery)
 
             if self.humioJob:
                 logging.debug("Humio polling..., class={0}".format(self.parse(True)),15)
